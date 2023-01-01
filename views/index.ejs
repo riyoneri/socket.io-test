@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notification Test sockets</title>
+</head>
+<body>
+    <div style="width: 100%; text-align: center;">
+        <form action="/add-notification" method="post">
+            <h2>Add Notification here</h2>
+            <label for="notif">
+                <input type="text" name="notification" id="notif">
+            </label>
+            <button type="submit">Submit</button>
+        </form>
+        <div style="width: 70%; text-align: center; margin: 30px auto;">
+            <ul>
+                <% for(let i in notifications) {%>
+                    <li style="list-style: none;">
+                        <%= notifications[i].name %>
+                    </li>
+                <% } %>
+            </ul>
+        </div>
+    </div>
+    <script src="/socket.io.js"></script>
+    <script>
+        let socket = io();
+        socket.on('notifications', sockets => {
+
+            const notifContainer = document.getElementsByTagName("ul")[0]
+            const listItem = document.createElement("li")
+            listItem.setAttribute("style", "list-style: none;")
+            listItem.innerHTML = sockets.notif
+
+            notifContainer.appendChild(listItem)
+        })
+
+        socket.on('unique', arg => {
+            console.log(arg)
+        })
+
+    </script>
+</body>
+</html>
